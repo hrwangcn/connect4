@@ -1,0 +1,94 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Connect 4!</title>
+	<link rel="stylesheet" href="style.css" />
+	<script src="game.js"></script>
+	<script src="mcts.pure.js"></script>
+	<script>
+		let game = new Connect4();
+		let ai = new Connect4AI('medium');
+		let regret = document.createElement('div');
+		//生成空表
+		function getEmptyBoard(){
+			let table = document.createElement('table');
+			for(let i of [...Array(game.height).keys()]){
+				let tr = document.createElement('tr');
+				for(let j of [...Array(game.width).keys()]){
+					let td = document.createElement('td');
+					td.id = `${i * game.width + j}`;
+					td.addEventListener('click',draw);
+					tr.appendChild(td);
+				}
+				table.prepend(tr);
+			}
+			return table;
+		}
+		
+		//落子
+		function draw(e) {
+			let target = parseInt(e.target.id);
+			let action = target % game.width;
+			if(game.getLegalActions().some(item => item === action)	&& !game.isTerminal() ){
+				game.performAction(action);
+				updateUI();
+				//moveAI();
+				//setTimeout(updateUI,1000);
+			}
+		}
+		
+		//悔棋
+		function back(){
+			if(game.history.length > 0){
+				let remove = game.history.pop();
+				game.board[remove] = 0;
+				game.currentPlayer *= -1;
+				updateUI();
+			} else {
+				alert('无法悔棋');
+			}
+		}
+		
+		//AI走子
+		function moveAI(){
+			if (!game.isTerminal()) {
+				// 获取AI移动
+				const aiMove = ai.getMove(game);
+				if (aiMove !== null) {
+					game.performAction(aiMove);
+				}
+			}
+		}
+		
+		//更新界面
+		function updateUI() {
+			for(let i = 0; i< game.board.length; i++){
+				document.getElementById(`${i}`).className = 
+					game.board[i] === 0?'':game.board[i] === 1?'black':'white';
+			}
+			
+			document.getElementById('hint').innerHTML = 
+				game.isTerminal()?
+					game.getResult() === 1e-4?'平局':
+						game.getResult() === 1?'黑子赢了':'白子赢了':
+					game.getCurrentPlayer() === 1?'黑子下棋':'白子下棋'
+		}
+		
+		window.onload = () => {
+			document.body.appendChild(getEmptyBoard());
+			let hint = document.createElement('div');
+			hint.id = 'hint';
+
+			regret.addEventListener('click', back);
+			regret.className = 'button';
+			regret.innerHTML = '悔棋';
+
+			document.body.prepend(hint);
+			document.body.appendChild(regret);
+			updateUI();
+		}
+	</script>
+</head>
+<body>
+</body>
+</html>

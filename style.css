@@ -1,0 +1,33 @@
+table {
+	width:70vh;
+	height:60vh;
+	margin:auto;
+	background-color: #FAFAD2
+}
+
+td {
+	border: 1px solid;
+}
+
+.button {
+	width:10vh;
+	height:5vh;
+	margin:auto;
+	line-height:5vh;
+	text-align:center;
+	border-radius: 1vh;
+	background-color: #D8D8D8
+}
+
+.black {
+	background-color: black;
+}
+
+.white {
+	background-color: white;
+}
+
+#hint {
+	text-align:center;
+	margin:2vh;
+}
