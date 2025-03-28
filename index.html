@@ -8,6 +8,7 @@
 	<script>
 		let game = new Connect4();
 		let ai = new Connect4AI('medium');
+		// Developer loves human!
 		let regret = document.createElement('div');
 		//生成空表
 		function getEmptyBoard(){
@@ -42,7 +43,8 @@
 			if(game.history.length > 0){
 				let remove = game.history.pop();
 				game.board[remove] = 0;
-				game.currentPlayer *= -1;
+				remove = game.history.pop();
+				game.board[remove] = 0;
 				updateUI();
 			} else {
 				alert('无法悔棋');
