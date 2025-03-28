@@ -17,7 +17,7 @@
 
 #### 如何运行
 
-访问 [网址](https://github.io/hrwangcn/connect4) 体验 
+访问 [网址](https://hrwangcn.github.io/connect4/) 体验 
 
 
 #### 鸣谢
