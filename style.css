@@ -1,21 +1,55 @@
+@media (orientation: portrait) {
+    table {
+			width:70vw;
+			height:60vw;
+    }
+    
+    .button {
+			width:10vw;
+			height:5vw;
+			line-height:5vw;
+			border-radius: 1vw;
+    }
+    
+    #hint {
+			margin:2vw;
+			font-size:
+    }
+}
+
+@media (orientation: landscape) {
+    table {
+			width:70vh;
+			height:60vh;
+    }
+    
+    .button {
+			width:10vh;
+			height:5vh;
+			line-height:5vh;
+			border-radius: 1vh;
+    }
+    
+    #hint {
+			margin:2vh;
+    }
+}
+
 table {
-	width:70vh;
-	height:60vh;
 	margin:auto;
-	background-color: #FAFAD2
+	border-collapse: collapse;
+	background-color: #FAFAD2;
 }
 
 td {
 	border: 1px solid;
+	border-color: #C1C1C1;
 }
 
 .button {
-	width:10vh;
-	height:5vh;
 	margin:auto;
-	line-height:5vh;
+	margin-top:2vh;
 	text-align:center;
-	border-radius: 1vh;
 	background-color: #D8D8D8
 }
 
@@ -29,5 +63,4 @@ td {
 
 #hint {
 	text-align:center;
-	margin:2vh;
 }

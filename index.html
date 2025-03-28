@@ -32,8 +32,8 @@
 			if(game.getLegalActions().some(item => item === action)	&& !game.isTerminal() ){
 				game.performAction(action);
 				updateUI();
-				//moveAI();
-				//setTimeout(updateUI,1000);
+				moveAI();
+				setTimeout(updateUI,500);
 			}
 		}
 		
