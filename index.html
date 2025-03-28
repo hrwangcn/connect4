@@ -64,12 +64,13 @@
 		
 		//更新界面
 		function updateUI() {
+			//棋盘显示
 			for(let i = 0; i< game.board.length; i++){
 				document.getElementById(`${i}`).className = 
 					game.board[i] === 0?'':game.board[i] === 1?'black':'white';
 			}
-			
-			document.getElementById('hint').innerHTML = 
+			//上部提示
+			document.getElementsByClassName('hint')[0].innerHTML = 
 				game.isTerminal()?
 					game.getResult() === 1e-4?'平局':
 						game.getResult() === 1?'黑子赢了':'白子赢了':
@@ -77,15 +78,15 @@
 		}
 		
 		window.onload = () => {
-			document.body.appendChild(getEmptyBoard());
 			let hint = document.createElement('div');
-			hint.id = 'hint';
+			hint.className = 'hint';
 
 			regret.addEventListener('click', back);
 			regret.className = 'button';
 			regret.innerHTML = '悔棋';
 
-			document.body.prepend(hint);
+			document.body.appendChild(hint);
+			document.body.appendChild(getEmptyBoard());
 			document.body.appendChild(regret);
 			updateUI();
 		}
