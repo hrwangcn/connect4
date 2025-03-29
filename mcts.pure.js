@@ -1,13 +1,13 @@
-// MCTS½ÚµãÀà
+// MCTSèŠ‚ç‚¹ç±»
 class MCTSNode {
   constructor(parent = null, action = null, gameState = null) {
-    this.parent = parent;         // ¸¸½Úµã
-    this.action = action;         // µ¼ÖÂ´Ë½ÚµãµÄ¶¯×÷
-    this.children = [];           // ×Ó½ÚµãÊı×é
-    this.wins = 0;                // Ó®µÃµÄÄ£Äâ´ÎÊı
-    this.visits = 0;              // ·ÃÎÊ´ÎÊı
-    this.untriedActions = [];     // ÉĞÎ´³¢ÊÔµÄ¶¯×÷
-    this.playerJustMoved = null;  // ¸Õ¸ÕÒÆ¶¯µÄÍæ¼Ò
+    this.parent = parent;         // çˆ¶èŠ‚ç‚¹
+    this.action = action;         // å¯¼è‡´æ­¤èŠ‚ç‚¹çš„åŠ¨ä½œ
+    this.children = [];           // å­èŠ‚ç‚¹æ•°ç»„
+    this.wins = 0;                // èµ¢å¾—çš„æ¨¡æ‹Ÿæ¬¡æ•°
+    this.visits = 0;              // è®¿é—®æ¬¡æ•°
+    this.untriedActions = [];     // å°šæœªå°è¯•çš„åŠ¨ä½œ
+    this.playerJustMoved = null;  // åˆšåˆšç§»åŠ¨çš„ç©å®¶
     
     if (gameState) {
       this.untriedActions = gameState.getLegalActions();
@@ -15,7 +15,7 @@ class MCTSNode {
     }
   }
 
-  // Ñ¡Ôñ×Ó½Úµã - UCB1Ëã·¨
+  // é€‰æ‹©å­èŠ‚ç‚¹ - UCB1ç®—æ³•
   selectChild() {
     let selected = null;
     let bestValue = -Infinity;
@@ -34,7 +34,7 @@ class MCTSNode {
     return selected;
   }
 
-  // Ìí¼Ó×Ó½Úµã
+  // æ·»åŠ å­èŠ‚ç‚¹
   addChild(action, gameState) {
     const newNode = new MCTSNode(this, action, gameState);
     this.untriedActions = this.untriedActions.filter(a => a !== action);
@@ -42,21 +42,21 @@ class MCTSNode {
     return newNode;
   }
 
-  // ¸üĞÂ½ÚµãÍ³¼ÆĞÅÏ¢
+  // æ›´æ–°èŠ‚ç‚¹ç»Ÿè®¡ä¿¡æ¯
   update(result) {
     this.visits += 1;
     this.wins += result;
   }
 }
 
-// MCTSËã·¨Àà
+// MCTSç®—æ³•ç±»
 class MCTS {
   constructor(iterations = 1000, explorationFactor = Math.sqrt(2)) {
-    this.iterations = iterations;          // Ã¿´ÎÒÆ¶¯µÄÄ£Äâ´ÎÊı
-    this.explorationFactor = explorationFactor; // Ì½Ë÷Òò×Ó
+    this.iterations = iterations;          // æ¯æ¬¡ç§»åŠ¨çš„æ¨¡æ‹Ÿæ¬¡æ•°
+    this.explorationFactor = explorationFactor; // æ¢ç´¢å› å­
   }
 
-  // »ñÈ¡×î¼ÑÒÆ¶¯
+  // è·å–æœ€ä½³ç§»åŠ¨
   getBestMove(gameState) {
     const root = new MCTSNode(null, null, gameState);
 
@@ -64,33 +64,33 @@ class MCTS {
       let node = root;
       let state = gameState.clone();
 
-      // Ñ¡Ôñ½×¶Î - Ñ¡Ôñ×îÓĞÇ±Á¦µÄ½Úµã
+      // é€‰æ‹©é˜¶æ®µ - é€‰æ‹©æœ€æœ‰æ½œåŠ›çš„èŠ‚ç‚¹
       while (node.untriedActions.length === 0 && node.children.length > 0) {
         node = node.selectChild();
         state.performAction(node.action);
       }
 
-      // À©Õ¹½×¶Î - Èç¹ûÓÎÏ·Î´½áÊø£¬À©Õ¹Ò»¸öÎ´³¢ÊÔµÄ¶¯×÷
+      // æ‰©å±•é˜¶æ®µ - å¦‚æœæ¸¸æˆæœªç»“æŸï¼Œæ‰©å±•ä¸€ä¸ªæœªå°è¯•çš„åŠ¨ä½œ
       if (node.untriedActions.length > 0 && !state.isTerminal()) {
         const action = node.untriedActions[Math.floor(Math.random() * node.untriedActions.length)];
         state.performAction(action);
         node = node.addChild(action, state);
       }
 
-      // Ä£Äâ½×¶Î - Ëæ»ú½øĞĞÓÎÏ·Ö±µ½½áÊø
+      // æ¨¡æ‹Ÿé˜¶æ®µ - éšæœºè¿›è¡Œæ¸¸æˆç›´åˆ°ç»“æŸ
       while (!state.isTerminal()) {
         const actions = state.getLegalActions();
         const randomAction = actions[Math.floor(Math.random() * actions.length)];
         state.performAction(randomAction);
       }
 
-      // »ØËİ½×¶Î - ¸üĞÂÂ·¾¶ÉÏµÄËùÓĞ½Úµã
+      // å›æº¯é˜¶æ®µ - æ›´æ–°è·¯å¾„ä¸Šçš„æ‰€æœ‰èŠ‚ç‚¹
       let result = state.getResult();
-      // ´Óµ±Ç°Íæ¼ÒµÄÊÓ½Çµ÷Õû½á¹û
-      if (result === 1e-4) result = 0; // Æ½¾Ö
+      // ä»å½“å‰ç©å®¶çš„è§†è§’è°ƒæ•´ç»“æœ
+      if (result === 1e-4) result = 0; // å¹³å±€
       
       while (node !== null) {
-        // ´Ó½ÚµãÍæ¼ÒµÄÊÓ½Ç¿´½á¹û
+        // ä»èŠ‚ç‚¹ç©å®¶çš„è§†è§’çœ‹ç»“æœ
         const nodePlayer = node.playerJustMoved;
         const adjustedResult = nodePlayer === result ? 1 : (result === 0 ? 0 : -1);
         node.update(adjustedResult);
@@ -98,7 +98,7 @@ class MCTS {
       }
     }
 
-    // Ñ¡Ôñ·ÃÎÊ´ÎÊı×î¶àµÄ×Ó½Úµã
+    // é€‰æ‹©è®¿é—®æ¬¡æ•°æœ€å¤šçš„å­èŠ‚ç‚¹
     let bestChild = null;
     let mostVisits = -Infinity;
 
@@ -113,7 +113,7 @@ class MCTS {
   }
 }
 
-// AIÍæ¼ÒÀà
+// AIç©å®¶ç±»
 class Connect4AI {
   constructor(difficulty = 'medium') {
     let iterations;
@@ -126,12 +126,12 @@ class Connect4AI {
     this.mcts = new MCTS(iterations);
   }
 
-  // »ñÈ¡AIµÄÒÆ¶¯
+  // è·å–AIçš„ç§»åŠ¨
   getMove(gameState) {
     const legalMoves = gameState.getLegalActions();
     if (legalMoves.length === 0) return null;
     
-    // ¶ÔÓÚµÚÒ»¸öÒÆ¶¯£¬¿ÉÒÔÓ²±àÂëÒÔ½ÚÊ¡Ê±¼ä£¨ÖĞ¼äÁĞÍ¨³£×îºÃ£©
+    // å¯¹äºç¬¬ä¸€ä¸ªç§»åŠ¨ï¼Œå¯ä»¥ç¡¬ç¼–ç ä»¥èŠ‚çœæ—¶é—´ï¼ˆä¸­é—´åˆ—é€šå¸¸æœ€å¥½ï¼‰
     if (gameState.board.every(item => item === 0)) return 3;
     
     return this.mcts.getBestMove(gameState);
