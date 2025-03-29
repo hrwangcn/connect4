@@ -8,10 +8,9 @@
 	<script>
 		let game = new Connect4();
 		let ai = new Connect4AI('medium');
-		// Developer loves human!
-		let regret = document.createElement('div');
-		//生成空表
-		function getEmptyBoard(){
+		
+		//生成空表，作为棋盘
+		function getTable() {
 			let table = document.createElement('table');
 			for(let i of [...Array(game.height).keys()]){
 				let tr = document.createElement('tr');
@@ -24,6 +23,15 @@
 				table.prepend(tr);
 			}
 			return table;
+		}
+		
+		//获取点击按钮，悔棋、重开等
+		function getButton(title, perform) {
+			let button = document.createElement('button');
+			button.addEventListener('click', perform);
+			button.className = 'button';
+			button.innerHTML = title;
+			return button;
 		}
 		
 		//落子
@@ -51,6 +59,18 @@
 			}
 		}
 		
+		//重开
+		function restart(){
+			game = new Connect4();
+			let diffculty = document.querySelector('select').value; //难度等级输入框的值
+			ai = ai = new Connect4AI(diffculty);
+			//玩家先手还是电脑先手
+			let first = document.querySelectorAll('input[name="set"]:checked')[0].value; 
+			if( parseInt(first) !== game.getCurrentPlayer() )
+				moveAI();
+			updateUI();
+		}
+		
 		//AI走子
 		function moveAI(){
 			if (!game.isTerminal()) {
@@ -70,7 +90,7 @@
 					game.board[i] === 0?'':game.board[i] === 1?'black':'white';
 			}
 			//上部提示
-			document.getElementsByClassName('hint')[0].innerHTML = 
+			document.querySelector('#hint').innerHTML = 
 				game.isTerminal()?
 					game.getResult() === 1e-4?'平局':
 						game.getResult() === 1?'黑子赢了':'白子赢了':
@@ -78,20 +98,34 @@
 		}
 		
 		window.onload = () => {
+			let table = getTable();
+			let regret = getButton('悔棋', back);
+			let reset = getButton('重开', restart);
 			let hint = document.createElement('div');
-			hint.className = 'hint';
-
-			regret.addEventListener('click', back);
-			regret.className = 'button';
-			regret.innerHTML = '悔棋';
+			let buttons = document.createElement('div');
+			
+			hint.id = 'hint';
 
 			document.body.appendChild(hint);
-			document.body.appendChild(getEmptyBoard());
-			document.body.appendChild(regret);
+			document.body.appendChild(table);
+			document.body.appendChild(buttons);
+			buttons.appendChild(regret);
+			buttons.appendChild(reset);
 			updateUI();
 		}
 	</script>
 </head>
 <body>
+	<div>AI难度：
+		<select name="diffculty">
+			<option value="easy">简单</option>
+			<option value="medium" selected>中等</option>
+			<option value="hard">较难</option>
+		</select>
+	</div>
+	<div>
+		玩家先手<input name="set" type="radio" value=1 checked />
+		AI先手<input name="set" type="radio" value=-1 />
+	</div>
 </body>
 </html>

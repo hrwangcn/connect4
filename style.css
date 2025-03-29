@@ -4,18 +4,23 @@
 			height:72vw;
     }
     
-    .button {
-			width:20vw;
-			height:10vw;
-			font-size: 6vw;
-			line-height:10vw;
+    button {
+			width: 20vw;
+			height: 10vw;
+			margin: 3vw;
+			font-size: 5vw;
+			line-height: 10vw;
 			border-radius: 1vw;
-			vertical-align:center;
+			vertical-align: center;
     }
     
-    .hint {
+    div {
 			margin:2vw;
-			font-size:6vw;
+			font-size:5vw;
+    }
+    
+    select {
+			font-size:5vw;
     }
 }
 
@@ -25,15 +30,22 @@
 			height:60vh;
     }
     
-    .button {
-			width:10vh;
-			height:5vh;
-			line-height:5vh;
+    button {
+			width: 10vh;
+			height: 5vh;
+			margin: 3vh;
+			font-size: 2.5vh;
+			line-height: 5vh;
 			border-radius: 1vh;
     }
     
-    .hint {
+    div {
 			margin:2vh;
+			font-size:2.5vh;
+    }
+    
+    select {
+			font-size:2.5vh;
     }
 }
 
@@ -43,15 +55,17 @@ table {
 	background-color: #FAFAD2;
 }
 
+div {
+	text-align:center;
+}
+
 td {
+	color: #C1C1C1;
 	border: 1px solid;
 	border-color: #C1C1C1;
 }
 
-.button {
-	margin:auto;
-	margin-top:2vh;
-	text-align:center;
+button {
 	background-color: #D8D8D8
 }
 
@@ -61,8 +75,4 @@ td {
 
 .white {
 	background-color: white;
-}
-
-.hint {
-	text-align:center;
 }
